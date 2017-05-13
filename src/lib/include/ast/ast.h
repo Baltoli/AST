@@ -27,6 +27,9 @@ public:
 
   Composite() {};
 
+  template<class Expr>
+  void add_member(Expr&& e);
+
   const std::unique_ptr<Expression>& operator [](std::size_t idx) const;
 private:
   std::vector<std::unique_ptr<Expression>> members_;
@@ -45,6 +48,7 @@ bool operator!= (const Symbol& rhs, const Symbol& lhs);
 bool operator< (const Symbol& rhs, const Symbol& lhs);
 
 bool operator== (const Composite& rhs, const Composite& lhs);
+bool operator!= (const Composite& rhs, const Composite& lhs);
 
 template<class Iterator>
 Composite::Composite(Iterator begin, Iterator end)
@@ -52,6 +56,12 @@ Composite::Composite(Iterator begin, Iterator end)
   for(auto it = begin; it != end; ++it) {
     members_.push_back(std::move(*it));
   }
+}
+
+template<class Expr>
+void Composite::add_member(Expr&& e)
+{
+  members_.emplace_back(new typename std::remove_reference<Expr>::type (std::move(e)));
 }
 
 }

@@ -35,7 +35,7 @@ bool operator== (const Composite& rhs, const Composite& lhs)
 
   auto all_match = true;
 
-  for(auto i = rhs.size(); i < rhs.size(); ++i) {
+  for(auto i = 0; i < rhs.size(); ++i) {
     if(!all_match) {
       return false;
     }
@@ -49,7 +49,7 @@ bool operator== (const Composite& rhs, const Composite& lhs)
     }
 
     if(auto r = dynamic_cast<Composite *>(rhs[i].get())) {
-      if(auto l = dynamic_cast<Composite *>(rhs[i].get())) {
+      if(auto l = dynamic_cast<Composite *>(lhs[i].get())) {
         all_match = all_match && (*r == *l);
       } else {
         all_match = false;
@@ -58,6 +58,11 @@ bool operator== (const Composite& rhs, const Composite& lhs)
   }
 
   return all_match;
+}
+
+bool operator!= (const Composite& rhs, const Composite& lhs)
+{
+  return !(rhs == lhs);
 }
 
 }
