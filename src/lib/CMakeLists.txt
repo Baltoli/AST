@@ -17,3 +17,11 @@ install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT ASTConfig DESTINATION share/AST/cmake)
 export(TARGETS ast FILE ASTConfig.cmake)
+
+add_executable(testast
+  test/testast.cpp)
+
+target_link_libraries(testast
+  ast)
+
+add_test(testast testast)
