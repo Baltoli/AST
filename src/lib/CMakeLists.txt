@@ -1,7 +1,8 @@
 project(libast VERSION 0.1 LANGUAGES CXX)
 
 add_library(ast
-  src/ast.cpp)
+  src/ast.cpp
+  src/ast_print.cpp)
 
 target_compile_features(ast PUBLIC
   cxx_auto_type 
@@ -24,7 +25,8 @@ export(TARGETS ast FILE ASTConfig.cmake)
 
 add_executable(testast
   test/test.cpp
-  test/data.cpp)
+  test/ast.cpp
+  test/ast_print.cpp)
 
 target_link_libraries(testast
   ast)

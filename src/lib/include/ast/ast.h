@@ -10,6 +10,8 @@ namespace ast {
 
 class Expression {
 public:
+  virtual std::string str() const = 0;
+
   virtual ~Expression() {}
 };
 
@@ -18,6 +20,8 @@ public:
   Symbol(std::string id);
 
   const std::string id;
+
+  std::string str() const override;
 };
 
 class Composite : public Expression {
@@ -29,6 +33,8 @@ public:
 
   template<class Expr>
   void add_member(Expr&& e);
+
+  std::string str() const override;
 
   const std::unique_ptr<Expression>& operator [](std::size_t idx) const;
 private:
