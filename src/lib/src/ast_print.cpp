@@ -17,7 +17,9 @@ std::vector<std::string> split(std::string input, std::string regex)
 
 bool needs_quote(std::string sym)
 {
-  return std::find(std::begin(sym), std::end(sym), ':') != std::end(sym); 
+  return std::any_of(std::begin(sym), std::end(sym), [](auto c) {
+    return (c == ':') || std::iscntrl(c) || std::isspace(c);
+  });
 }
 
 }
