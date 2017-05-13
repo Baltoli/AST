@@ -1,11 +1,12 @@
 #include <ast/ast.h>
 
+#include <iomanip>
 #include <regex>
 #include <sstream>
 
 namespace {
 
-std::vector<std::string> split(const std::string& input, const std::string& regex)
+std::vector<std::string> split(std::string input, std::string regex)
 {
   std::regex re(regex);
   std::sregex_token_iterator
@@ -14,13 +15,27 @@ std::vector<std::string> split(const std::string& input, const std::string& rege
   return {first, last};
 }
 
+bool needs_quote(std::string sym)
+{
+  return std::find(std::begin(sym), std::end(sym), ':') != std::end(sym); 
+}
+
 }
 
 namespace ast {
 
 std::string Symbol::str() const
 {
-  return ":" + id;
+  std::stringstream ss;
+  ss << ":";
+
+  if(needs_quote(id)) {
+    ss << std::quoted(id);
+  } else {
+    ss << id;
+  }
+  
+  return ss.str();
 }
 
 std::string Composite::str() const
