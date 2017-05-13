@@ -42,6 +42,10 @@ std::string Symbol::str() const
 
 std::string Composite::str() const
 {
+  if(size() == 0) {
+    return "()";
+  }
+
   std::stringstream ss;
   ss << "(\n";
   for(auto&& m : *this) {
