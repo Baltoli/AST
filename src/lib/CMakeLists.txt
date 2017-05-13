@@ -3,6 +3,10 @@ project(libast VERSION 0.1 LANGUAGES CXX)
 add_library(ast
   src/ast.cpp)
 
+target_compile_features(ast PUBLIC
+  cxx_auto_type 
+  cxx_return_type_deduction)
+
 target_include_directories(ast PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
