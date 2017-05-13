@@ -17,6 +17,11 @@ bool operator==(const Symbol& rhs, const Symbol& lhs)
   return rhs.id == lhs.id;
 }
 
+bool operator!= (const Symbol& rhs, const Symbol& lhs)
+{
+  return !(rhs == lhs);
+}
+
 bool operator< (const Symbol& rhs, const Symbol& lhs)
 {
   return rhs.id < lhs.id;

@@ -41,6 +41,7 @@ public:
 };
 
 bool operator== (const Symbol& rhs, const Symbol& lhs);
+bool operator!= (const Symbol& rhs, const Symbol& lhs);
 bool operator< (const Symbol& rhs, const Symbol& lhs);
 
 bool operator== (const Composite& rhs, const Composite& lhs);
