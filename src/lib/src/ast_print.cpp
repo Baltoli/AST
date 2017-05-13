@@ -19,7 +19,7 @@ bool needs_quote(std::string sym)
 {
   return std::any_of(std::begin(sym), std::end(sym), [](auto c) {
     return (c == ':') || std::iscntrl(c) || std::isspace(c);
-  });
+  }) || sym.empty();
 }
 
 }
