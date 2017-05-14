@@ -1,8 +1,8 @@
-add_executable(astc
-  src/astc.cpp)
+add_executable(print
+  src/print.cpp)
 
-target_link_libraries(astc
+target_link_libraries(print
   ast)
 
-install(TARGETS astc EXPORT ASTConfig
+install(TARGETS print EXPORT ASTConfig
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
