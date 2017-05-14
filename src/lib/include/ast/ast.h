@@ -35,6 +35,17 @@ public:
 
   Composite() {};
 
+  Composite(const Composite& other) {
+    for(auto&& e : other) {
+      members_.push_back(std::unique_ptr<Expression>(e->clone()));
+    }
+  }
+
+  Composite& operator=(Composite other) {
+    std::swap(members_, other.members_);
+    return *this;
+  }
+
   template<class Expr>
   void add_member(Expr&& e);
 
