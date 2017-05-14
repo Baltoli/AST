@@ -3,6 +3,7 @@
 
 #include <ast/ast.h>
 
+#include <iostream>
 #include <string>
 
 namespace ast {
