@@ -8,6 +8,25 @@
 
 namespace ast {
 
+template<class T>
+class ParseResult {
+public:
+  ParseResult() :
+    data(nullptr) {}
+
+  ParseResult(T t, std::string::iterator end) :
+    data(new T(t)), end_(end) {}
+
+  auto end() const { 
+    assert(data && "Accessing end with no data!");
+    return end_; 
+  }
+
+  const std::unique_ptr<const T> data;
+private:
+  std::string::iterator end_;
+};
+
 class SymbolParser {
 public:
   template<class Iter>
