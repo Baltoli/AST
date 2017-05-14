@@ -2,7 +2,6 @@
 
 #include <ast/ast.h>
 
-#include <iostream>
 #include <sstream>
 
 namespace ast {
@@ -33,10 +32,14 @@ ParseResult<Symbol> SymbolParser::get_unquoted() const
   auto it = begin_ + 1;
   for(; it != end_; ++it) {
     if(*it == ':' || std::iscntrl(*it) || std::isspace(*it)) {
-      return ParseResult<Symbol>{};
+      break;
     }
 
     ss << *it;
+  }
+
+  if(ss.str().empty()) {
+    return ParseResult<Symbol>{};
   }
 
   return ParseResult<Symbol>(Symbol(ss.str()), it);

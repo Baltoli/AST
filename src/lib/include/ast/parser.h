@@ -3,7 +3,7 @@
 
 #include <ast/ast.h>
 
-#include <iostream>
+#include <cassert>
 #include <string>
 
 namespace ast {
@@ -14,7 +14,7 @@ public:
   ParseResult() :
     data(nullptr) {}
 
-  ParseResult(T t, std::string::iterator end) :
+  ParseResult(T t, std::string::const_iterator end) :
     data(new T(t)), end_(end) {}
 
   ParseResult(const ParseResult<T>& other) :
@@ -37,7 +37,7 @@ public:
     return static_cast<bool>(data);
   }
 private:
-  std::string::iterator end_;
+  std::string::const_iterator end_;
 };
 
 class SymbolParser {
@@ -45,7 +45,7 @@ public:
   template<class Iter>
   SymbolParser(Iter begin, Iter end);
 
-  SymbolParser(std::string s) :
+  SymbolParser(const std::string& s) :
     SymbolParser(std::begin(s), std::end(s)) {}
 
   ParseResult<Symbol> get() const;
@@ -53,8 +53,8 @@ private:
   ParseResult<Symbol> get_unquoted() const;
   ParseResult<Symbol> get_quoted() const;
 
-  const std::string::iterator begin_;
-  const std::string::iterator end_;
+  const std::string::const_iterator begin_;
+  const std::string::const_iterator end_;
 };
 
 template<class Iter>

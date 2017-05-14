@@ -22,12 +22,16 @@ TEST_CASE("symbols can be parsed") {
 
     auto sym3 = ast::SymbolParser(":").get();
     REQUIRE(!sym3);
+  }
 
+  SECTION("stop parsing at failure") {
     auto sym4 = ast::SymbolParser(":fewioj wefioh").get();
-    REQUIRE(!sym4);
+    REQUIRE(sym4);
+    REQUIRE(*sym4.end() == ' ');
 
     auto sym5 = ast::SymbolParser(":wef:").get();
-    REQUIRE(!sym5);
+    REQUIRE(sym5);
+    REQUIRE(*sym5.end() == ':');
   }
 
   SECTION("quoted symbols") {

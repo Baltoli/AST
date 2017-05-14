@@ -1,4 +1,5 @@
 #include <ast/ast.h>
+#include <ast/parser.h>
 
 #include <iostream>
 
