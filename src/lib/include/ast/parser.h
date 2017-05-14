@@ -43,7 +43,8 @@ private:
 class SymbolParser {
 public:
   template<class Iter>
-  SymbolParser(Iter begin, Iter end);
+  SymbolParser(Iter begin, Iter end) :
+    begin_(begin), end_(end) {}
 
   SymbolParser(const std::string& s) :
     SymbolParser(std::begin(s), std::end(s)) {}
@@ -57,11 +58,19 @@ private:
   const std::string::const_iterator end_;
 };
 
-template<class Iter>
-SymbolParser::SymbolParser(Iter begin, Iter end) :
-  begin_(begin), end_(end)
-{
-}
+class CompositeParser {
+public:
+  template<class Iter>
+  CompositeParser(Iter begin, Iter end) :
+    begin_(begin), end_(end) {}
+
+  CompositeParser(const std::string& s) :
+    CompositeParser(std::begin(s), std::end(s)) {}
+private:
+
+  const std::string::const_iterator begin_;
+  const std::string::const_iterator end_;
+};
 
 }
 

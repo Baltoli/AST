@@ -12,6 +12,8 @@ class Expression {
 public:
   virtual std::string str() const = 0;
 
+  virtual Expression *clone() const = 0;
+
   virtual ~Expression() {}
 };
 
@@ -22,6 +24,8 @@ public:
   const std::string id;
 
   std::string str() const override;
+
+  Symbol *clone() const override;
 };
 
 class Composite : public Expression {
@@ -35,6 +39,8 @@ public:
   void add_member(Expr&& e);
 
   std::string str() const override;
+
+  Composite *clone() const override;
 
   const std::unique_ptr<Expression>& operator [](std::size_t idx) const;
 private:

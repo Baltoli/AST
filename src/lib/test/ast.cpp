@@ -21,6 +21,16 @@ TEST_CASE("symbols can be compared for equality") {
   }
 }
 
+TEST_CASE("symbols can be cloned") {
+  auto e = std::make_unique<ast::Symbol>("hello");
+  auto e2 = std::unique_ptr<ast::Symbol>(e->clone());
+
+  REQUIRE(e != e2);
+  REQUIRE(*e == *e2);
+
+  REQUIRE(e2->id == "hello");
+}
+
 TEST_CASE("symbols can be ordered") {
   ast::Symbol s1("hello");
   ast::Symbol s2("hellode");
@@ -113,4 +123,22 @@ TEST_CASE("composites can be compared for equality") {
 
     REQUIRE(c1 == c2);
   }
+}
+
+TEST_CASE("composites can be cloned") {
+  auto c = std::make_unique<ast::Composite>();
+  auto c2 = ast::Composite{};
+
+  auto s = ast::Symbol("a");
+  c->add_member(s);
+
+  auto s2 = ast::Symbol("b");
+  c2.add_member(s2);
+  c->add_member(c2);
+
+  auto clone = std::unique_ptr<ast::Composite>(c->clone());
+
+  REQUIRE(clone->size() == 2);
+  REQUIRE(clone != c);
+  REQUIRE(*c == *clone);
 }

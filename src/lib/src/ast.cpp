@@ -7,6 +7,20 @@ Symbol::Symbol(std::string id) :
 {
 }
 
+Symbol *Symbol::clone() const
+{
+  return new Symbol(id);
+}
+
+Composite *Composite::clone() const
+{
+  auto c = new Composite;
+  for(auto&& e : *this) {
+    c->members_.push_back(std::move(std::unique_ptr<Expression>(e->clone())));
+  }
+  return c;
+}
+
 const std::unique_ptr<Expression>& Composite::operator[](std::size_t idx) const
 {
   return members_.at(idx);
