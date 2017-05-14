@@ -17,12 +17,25 @@ public:
   ParseResult(T t, std::string::iterator end) :
     data(new T(t)), end_(end) {}
 
+  ParseResult(const ParseResult<T>& other) :
+    data(new T(*other.data)), end_(other.end_) {}
+
+  ParseResult<T>& operator=(ParseResult<T> other) {
+    std::swap(data, other.data);
+    std::swap(end_, other.end_);
+    return *this;
+  }
+
   auto end() const { 
     assert(data && "Accessing end with no data!");
     return end_; 
   }
 
   const std::unique_ptr<const T> data;
+
+  operator bool() const {
+    return static_cast<bool>(data);
+  }
 private:
   std::string::iterator end_;
 };
@@ -35,10 +48,10 @@ public:
   SymbolParser(std::string s) :
     SymbolParser(std::begin(s), std::end(s)) {}
 
-  std::unique_ptr<Symbol> get() const;
+  ParseResult<Symbol> get() const;
 private:
-  std::unique_ptr<Symbol> get_unquoted() const;
-  std::unique_ptr<Symbol> get_quoted() const;
+  ParseResult<Symbol> get_unquoted() const;
+  ParseResult<Symbol> get_quoted() const;
 
   const std::string::iterator begin_;
   const std::string::iterator end_;

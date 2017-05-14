@@ -7,12 +7,12 @@
 
 namespace ast {
 
-std::unique_ptr<Symbol> SymbolParser::get() const
+ParseResult<Symbol> SymbolParser::get() const
 {
   auto it = begin_;
 
   if(*it != ':') {
-    return nullptr;
+    return ParseResult<Symbol>{};
   }
   it++;
 
@@ -23,32 +23,33 @@ std::unique_ptr<Symbol> SymbolParser::get() const
   }
 }
 
-std::unique_ptr<Symbol> SymbolParser::get_unquoted() const
+ParseResult<Symbol> SymbolParser::get_unquoted() const
 {
   if(end_ - begin_ <= 1) {
-    return nullptr;
+    return ParseResult<Symbol>{};
   }
 
   std::stringstream ss;
-  for(auto it = begin_ + 1; it != end_; ++it) {
+  auto it = begin_ + 1;
+  for(; it != end_; ++it) {
     if(*it == ':' || std::iscntrl(*it) || std::isspace(*it)) {
-      return nullptr;
+      return ParseResult<Symbol>{};
     }
 
     ss << *it;
   }
 
-  return std::unique_ptr<Symbol>(new Symbol(ss.str()));
+  return ParseResult<Symbol>(Symbol(ss.str()), it);
 }
 
-std::unique_ptr<Symbol> SymbolParser::get_quoted() const
+ParseResult<Symbol> SymbolParser::get_quoted() const
 {
   if(end_ - begin_ <= 2) {
-    return nullptr;
+    return ParseResult<Symbol>{};
   }
 
   if(*begin_ != ':' || *(begin_ + 1) != '"') {
-    return nullptr;
+    return ParseResult<Symbol>{};
   }
 
   std::stringstream ss;
@@ -63,7 +64,7 @@ std::unique_ptr<Symbol> SymbolParser::get_quoted() const
     ss << *it;
   }
 
-  return std::unique_ptr<Symbol>(new Symbol(ss.str()));
+  return ParseResult<Symbol>(Symbol(ss.str()), it);
 }
 
 }
