@@ -21,6 +21,11 @@ Composite *Composite::clone() const
   return c;
 }
 
+void Composite::add_member(std::unique_ptr<Expression> e)
+{
+  members_.push_back(std::move(e));
+}
+
 const std::unique_ptr<Expression>& Composite::operator[](std::size_t idx) const
 {
   return members_.at(idx);

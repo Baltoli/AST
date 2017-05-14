@@ -31,7 +31,7 @@ public:
     return end_; 
   }
 
-  const std::unique_ptr<const T> data;
+  std::unique_ptr<T> data;
 
   operator bool() const {
     return static_cast<bool>(data);
@@ -66,10 +66,18 @@ public:
 
   CompositeParser(const std::string& s) :
     CompositeParser(std::begin(s), std::end(s)) {}
-private:
 
-  const std::string::const_iterator begin_;
-  const std::string::const_iterator end_;
+  ParseResult<Composite> get() const;
+private:
+  using iterator = std::string::const_iterator;
+
+  iterator skip_whitespace(iterator it) const {
+    while(std::isspace(*it)) { it++; }
+    return it;
+  }
+
+  const iterator begin_;
+  const iterator end_;
 };
 
 }

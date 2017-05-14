@@ -49,6 +49,8 @@ public:
   template<class Expr>
   void add_member(Expr&& e);
 
+  void add_member(std::unique_ptr<Expression> e);
+
   std::string str() const override;
 
   Composite *clone() const override;
