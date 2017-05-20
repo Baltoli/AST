@@ -93,9 +93,18 @@ public:
     expr_(e) {}
 
   virtual bool match(const Expression &e) const override;
-
 private:
   const MatchExpression &expr_;
+};
+
+class NumChildren : public MatchExpression {
+public:
+  NumChildren(size_t n) :
+    num_(n) {}
+
+  virtual bool match(const Expression &e) const override;
+private:
+  size_t num_;
 };
 
 }

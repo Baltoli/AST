@@ -47,4 +47,13 @@ bool HasChild::match(const Expression &e) const
   return false;
 }
 
+bool NumChildren::match(const Expression &e) const
+{
+  if(auto comp = dynamic_cast<const Composite *>(&e)) {
+    return comp->size() == num_;
+  }
+
+  return false;
+}
+
 }

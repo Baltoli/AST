@@ -73,3 +73,18 @@ TEST_CASE("has child matches") {
   f.add_member(Symbol("sym"));
   REQUIRE(ex.match(f));
 }
+
+TEST_CASE("num children matches") {
+  auto c = Composite();
+  auto ex = NumChildren(3);
+  REQUIRE(!ex.match(c));
+
+  c.add_member(Composite());
+  REQUIRE(!ex.match(c));
+
+  c.add_member(Symbol("a"));
+  REQUIRE(!ex.match(c));
+
+  c.add_member(Symbol("v"));
+  REQUIRE(ex.match(c));
+}
