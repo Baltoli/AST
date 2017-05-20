@@ -5,11 +5,17 @@
 
 namespace ast {
 
+/**
+ * Abstract base class from which all other match types inherit.
+ */
 class MatchExpression {
 public:
   virtual bool match(const Expression &e) const = 0;
 };
 
+/**
+ * Matches any expression.
+ */
 class Any : public MatchExpression {
 public:
   Any() {}
@@ -17,6 +23,9 @@ public:
   virtual bool match(const Expression &e) const override;
 };
 
+/**
+ * Matches any symbol.
+ */
 class IsSymbol : public MatchExpression {
 public:
   IsSymbol() {}
@@ -24,6 +33,9 @@ public:
   virtual bool match(const Expression &e) const override;
 };
 
+/**
+ * Matches any composite.
+ */
 class IsComposite : public MatchExpression {
 public:
   IsComposite() {}
@@ -31,6 +43,9 @@ public:
   virtual bool match(const Expression &e) const override;
 };
 
+/**
+ * Matches a single expression by equality.
+ */
 class Exact : public MatchExpression {
 public:
   Exact(const Symbol& sym) :
@@ -41,6 +56,9 @@ private:
   const Symbol& symbol_;
 };
 
+/**
+ * Matches either of two subexpressions.
+ */
 class Either : public MatchExpression {
 public:
   Either(const MatchExpression &l, const MatchExpression &r) :
@@ -52,6 +70,9 @@ private:
   const MatchExpression &right_;
 };
 
+/**
+ * Matches both of two subexpressions.
+ */
 class Both : public MatchExpression {
 public:
   Both(const MatchExpression &l, const MatchExpression &r) :
@@ -63,6 +84,9 @@ private:
   const MatchExpression &right_;
 };
 
+/**
+ * Matches a composite with a child that matches the subexpression.
+ */
 class HasChild : public MatchExpression {
 public:
   HasChild(const MatchExpression &e) :
