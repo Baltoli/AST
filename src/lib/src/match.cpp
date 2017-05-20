@@ -7,6 +7,16 @@ bool Any::match(const Expression &e) const
   return true;
 }
 
+bool IsSymbol::match(const Expression &e) const
+{
+  return dynamic_cast<const Symbol *>(&e);
+}
+
+bool IsComposite::match(const Expression &e) const
+{
+  return dynamic_cast<const Composite *>(&e);
+}
+
 bool Exact::match(const Expression &e) const
 {
   if(auto sym = dynamic_cast<const Symbol *>(&e)) {
@@ -32,6 +42,28 @@ bool HasChild::match(const Expression &e) const
     return std::any_of(std::cbegin(*comp), std::cend(*comp), [&](auto&& ch) {
       return expr_.match(*ch);
     });
+  }
+
+  return false;
+}
+
+bool NumChildren::match(const Expression &e) const
+{
+  if(auto comp = dynamic_cast<const Composite *>(&e)) {
+    return comp->size() == num_;
+  }
+
+  return false;
+}
+
+bool Child::match(const Expression &e) const
+{
+  if(auto comp = dynamic_cast<const Composite *>(&e)) {
+    if(comp->size() <= num_) {
+      return false;
+    }
+
+    return expr_.match(*((*comp)[num_]));
   }
 
   return false;

@@ -11,6 +11,20 @@ TEST_CASE("any matches") {
   REQUIRE(a.match(Composite()));
 }
 
+TEST_CASE("is symbol matches") {
+  auto ex = IsSymbol();
+
+  REQUIRE(ex.match(Symbol("j")));
+  REQUIRE(!ex.match(Composite()));
+}
+
+TEST_CASE("is composite matches") {
+  auto ex = IsComposite();
+
+  REQUIRE(!ex.match(Symbol("j")));
+  REQUIRE(ex.match(Composite()));
+}
+
 TEST_CASE("exact matches") {
   auto ex = Exact(Symbol("sym"));
 
@@ -58,4 +72,38 @@ TEST_CASE("has child matches") {
   f.add_member(Symbol("ewoi"));
   f.add_member(Symbol("sym"));
   REQUIRE(ex.match(f));
+}
+
+TEST_CASE("num children matches") {
+  auto c = Composite();
+  auto ex = NumChildren(3);
+  REQUIRE(!ex.match(c));
+
+  c.add_member(Composite());
+  REQUIRE(!ex.match(c));
+
+  c.add_member(Symbol("a"));
+  REQUIRE(!ex.match(c));
+
+  c.add_member(Symbol("v"));
+  REQUIRE(ex.match(c));
+
+  REQUIRE(!ex.match(Symbol("wij")));
+}
+
+TEST_CASE("nth children matches") {
+  auto c = Composite();
+  auto ex = Child(1, Exact(Symbol("hf")));
+  REQUIRE(!ex.match(c));
+
+  c.add_member(Symbol("hf"));
+  REQUIRE(!ex.match(c));
+
+  c.add_member(Symbol("hf"));
+  REQUIRE(ex.match(c));
+
+  c.add_member(Symbol("fewh"));
+  REQUIRE(ex.match(c));
+
+  REQUIRE(!ex.match(Symbol("ewijof")));
 }
