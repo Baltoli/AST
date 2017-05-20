@@ -20,6 +20,17 @@ private:
   const Symbol& symbol_;
 };
 
+class Either : public MatchExpression {
+public:
+  Either(MatchExpression *l, MatchExpression *r) :
+    left_(l), right_(r) {}
+
+  virtual bool match(Expression *e) const override;
+private:
+  const MatchExpression *left_;
+  const MatchExpression *right_;
+};
+
 }
 
 #endif
