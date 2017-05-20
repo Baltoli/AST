@@ -7,14 +7,14 @@ namespace ast {
 
 class MatchExpression {
 public:
-  virtual bool match(Expression *e) const = 0;
+  virtual bool match(const Expression &e) const = 0;
 };
 
 class Any : public MatchExpression {
 public:
   Any() {}
 
-  virtual bool match(Expression *e) const override;
+  virtual bool match(const Expression &e) const override;
 };
 
 class Exact : public MatchExpression {
@@ -22,7 +22,7 @@ public:
   Exact(const Symbol& sym) :
     symbol_(sym) {}
 
-  virtual bool match(Expression *e) const override;
+  virtual bool match(const Expression &e) const override;
 private:
   const Symbol& symbol_;
 };
@@ -32,7 +32,7 @@ public:
   Either(MatchExpression *l, MatchExpression *r) :
     left_(l), right_(r) {}
 
-  virtual bool match(Expression *e) const override;
+  virtual bool match(const Expression &e) const override;
 private:
   const MatchExpression *left_;
   const MatchExpression *right_;
@@ -43,7 +43,7 @@ public:
   Both(MatchExpression *l, MatchExpression *r) :
     left_(l), right_(r) {}
 
-  virtual bool match(Expression *e) const override;
+  virtual bool match(const Expression &e) const override;
 private:
   const MatchExpression *left_;
   const MatchExpression *right_;
@@ -54,7 +54,7 @@ public:
   HasChild(MatchExpression *e) :
     expr_(e) {}
 
-  virtual bool match(Expression *e) const override;
+  virtual bool match(const Expression &e) const override;
 
 private:
   const MatchExpression *expr_;
