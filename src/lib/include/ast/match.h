@@ -68,6 +68,20 @@ private:
 };
 
 /**
+ * Matches a symbol according to a predicate
+ */
+class Predicate : public MatchExpression {
+public:
+  Predicate(std::function<bool (std::string)> p) :
+    pred_(p) {}
+
+  virtual bool match(const Expression &e) const override;
+  virtual Predicate* clone() const override { return new Predicate(pred_); }
+private:
+  std::function<bool (std::string)> pred_;
+};
+
+/**
  * Matches either of two subexpressions.
  */
 class Either : public MatchExpression {

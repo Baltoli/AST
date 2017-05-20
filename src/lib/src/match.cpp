@@ -26,6 +26,15 @@ bool Exact::match(const Expression &e) const
   return false;
 }
 
+bool Predicate::match(const Expression &e) const
+{
+  if(auto sym = dynamic_cast<const Symbol *>(&e)) {
+    return pred_(sym->id);
+  }
+
+  return false;
+}
+
 bool Either::match(const Expression &e) const
 {
   return left_->match(e) || right_->match(e);

@@ -19,6 +19,9 @@ int main()
   }
 
   if(statement()->match(*result.data)) {
+    std::cout << result.data->str() << '\n';
+  } else {
+    std::cerr << "Not a statement\n";
   }
 
   return 0;

@@ -249,3 +249,18 @@ TEST_CASE("recursive matching") {
     REQUIRE(ex.match(Composite{Composite{Composite{Symbol("a")}}}));
   }
 }
+
+TEST_CASE("predicate matching") {
+  auto ex = Predicate([](auto s) { return s[0] == 'a'; });
+
+  SECTION("on a composite") {
+    REQUIRE(!ex.match(Composite()));
+  }
+
+  SECTION("on a symbol") {
+    REQUIRE(ex.match(Symbol("asdfgh")));
+    REQUIRE(ex.match(Symbol("a")));
+    REQUIRE(!ex.match(Symbol("")));
+    REQUIRE(!ex.match(Symbol("nbguj")));
+  }
+}
