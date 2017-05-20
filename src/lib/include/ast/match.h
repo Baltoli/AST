@@ -38,6 +38,17 @@ private:
   const MatchExpression *right_;
 };
 
+class Both : public MatchExpression {
+public:
+  Both(MatchExpression *l, MatchExpression *r) :
+    left_(l), right_(r) {}
+
+  virtual bool match(Expression *e) const override;
+private:
+  const MatchExpression *left_;
+  const MatchExpression *right_;
+};
+
 class HasChild : public MatchExpression {
 public:
   HasChild(MatchExpression *e) :

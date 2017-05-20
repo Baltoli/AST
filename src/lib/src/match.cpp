@@ -21,6 +21,11 @@ bool Either::match(Expression *e) const
   return left_->match(e) || right_->match(e);
 }
 
+bool Both::match(Expression *e) const
+{
+  return left_->match(e) && right_->match(e);
+}
+
 bool HasChild::match(Expression *e) const
 {
   if(auto comp = dynamic_cast<Composite *>(e)) {

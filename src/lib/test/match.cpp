@@ -41,6 +41,23 @@ TEST_CASE("either matches") {
   REQUIRE(!e.match(u.get()));
 }
 
+TEST_CASE("both matches") {
+  auto a = ast::Exact(ast::Symbol("a"));
+  auto ca = ast::HasChild(&a);
+
+  auto b = ast::Exact(ast::Symbol("b"));
+  auto cb = ast::HasChild(&b);
+
+  auto c = ast::Both(&ca, &cb);
+
+  auto comp = ast::Composite();
+  comp.add_member(ast::Symbol("a"));
+  REQUIRE(!c.match(&comp));
+
+  comp.add_member(ast::Symbol("b"));
+  REQUIRE(c.match(&comp));
+}
+
 TEST_CASE("has child matches") {
   auto ch = ast::Exact(ast::Symbol("sym"));
   auto ex = ast::HasChild(&ch);
