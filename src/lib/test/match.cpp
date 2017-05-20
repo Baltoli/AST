@@ -11,6 +11,20 @@ TEST_CASE("any matches") {
   REQUIRE(a.match(Composite()));
 }
 
+TEST_CASE("is symbol matches") {
+  auto ex = IsSymbol();
+
+  REQUIRE(ex.match(Symbol("j")));
+  REQUIRE(!ex.match(Composite()));
+}
+
+TEST_CASE("is composite matches") {
+  auto ex = IsComposite();
+
+  REQUIRE(!ex.match(Symbol("j")));
+  REQUIRE(ex.match(Composite()));
+}
+
 TEST_CASE("exact matches") {
   auto ex = Exact(Symbol("sym"));
 

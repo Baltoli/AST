@@ -17,6 +17,20 @@ public:
   virtual bool match(const Expression &e) const override;
 };
 
+class IsSymbol : public MatchExpression {
+public:
+  IsSymbol() {}
+
+  virtual bool match(const Expression &e) const override;
+};
+
+class IsComposite : public MatchExpression {
+public:
+  IsComposite() {}
+
+  virtual bool match(const Expression &e) const override;
+};
+
 class Exact : public MatchExpression {
 public:
   Exact(const Symbol& sym) :

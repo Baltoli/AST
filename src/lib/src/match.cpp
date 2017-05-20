@@ -7,6 +7,16 @@ bool Any::match(const Expression &e) const
   return true;
 }
 
+bool IsSymbol::match(const Expression &e) const
+{
+  return dynamic_cast<const Symbol *>(&e);
+}
+
+bool IsComposite::match(const Expression &e) const
+{
+  return dynamic_cast<const Composite *>(&e);
+}
+
 bool Exact::match(const Expression &e) const
 {
   if(auto sym = dynamic_cast<const Symbol *>(&e)) {
