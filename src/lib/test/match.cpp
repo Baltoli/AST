@@ -87,4 +87,23 @@ TEST_CASE("num children matches") {
 
   c.add_member(Symbol("v"));
   REQUIRE(ex.match(c));
+
+  REQUIRE(!ex.match(Symbol("wij")));
+}
+
+TEST_CASE("nth children matches") {
+  auto c = Composite();
+  auto ex = Child(1, Exact(Symbol("hf")));
+  REQUIRE(!ex.match(c));
+
+  c.add_member(Symbol("hf"));
+  REQUIRE(!ex.match(c));
+
+  c.add_member(Symbol("hf"));
+  REQUIRE(ex.match(c));
+
+  c.add_member(Symbol("fewh"));
+  REQUIRE(ex.match(c));
+
+  REQUIRE(!ex.match(Symbol("ewijof")));
 }

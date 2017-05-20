@@ -107,6 +107,17 @@ private:
   size_t num_;
 };
 
+class Child : public MatchExpression {
+public:
+  Child(size_t n, const MatchExpression &e) :
+    num_(n), expr_(e) {}
+
+  virtual bool match(const Expression &e) const override;
+private:
+  size_t num_;
+  const MatchExpression &expr_;
+};
+
 }
 
 #endif
