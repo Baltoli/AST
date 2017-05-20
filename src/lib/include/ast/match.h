@@ -13,6 +13,8 @@ namespace ast {
 class MatchExpression {
 public:
   virtual bool match(const Expression &e) const = 0;
+
+  virtual MatchExpression* clone() const = 0;
 };
 
 /**
@@ -23,6 +25,7 @@ public:
   Any() {}
 
   virtual bool match(const Expression &e) const override;
+  virtual Any* clone() const override { return new Any(); }
 };
 
 /**
@@ -33,6 +36,7 @@ public:
   IsSymbol() {}
 
   virtual bool match(const Expression &e) const override;
+  virtual IsSymbol* clone() const override { return new IsSymbol(); }
 };
 
 /**
@@ -43,6 +47,7 @@ public:
   IsComposite() {}
 
   virtual bool match(const Expression &e) const override;
+  virtual IsComposite* clone() const override { return new IsComposite(); }
 };
 
 /**
@@ -50,12 +55,13 @@ public:
  */
 class Exact : public MatchExpression {
 public:
-  Exact(const Symbol& sym) :
+  Exact(Symbol sym) :
     symbol_(sym) {}
 
   virtual bool match(const Expression &e) const override;
+  virtual Exact* clone() const override { return new Exact(symbol_); }
 private:
-  const Symbol& symbol_;
+  Symbol symbol_;
 };
 
 /**
@@ -64,12 +70,13 @@ private:
 class Either : public MatchExpression {
 public:
   Either(const MatchExpression &l, const MatchExpression &r) :
-    left_(l), right_(r) {}
+    left_(l.clone()), right_(r.clone()) {}
 
   virtual bool match(const Expression &e) const override;
+  virtual Either* clone() const override { return new Either(*left_, *right_); }
 private:
-  const MatchExpression &left_;
-  const MatchExpression &right_;
+  std::unique_ptr<MatchExpression> left_;
+  std::unique_ptr<MatchExpression> right_;
 };
 
 /**
@@ -78,12 +85,13 @@ private:
 class Both : public MatchExpression {
 public:
   Both(const MatchExpression &l, const MatchExpression &r) :
-    left_(l), right_(r) {}
+    left_(l.clone()), right_(r.clone()) {}
 
   virtual bool match(const Expression &e) const override;
+  virtual Both* clone() const override { return new Both(*left_, *right_); }
 private:
-  const MatchExpression &left_;
-  const MatchExpression &right_;
+  std::unique_ptr<MatchExpression> left_;
+  std::unique_ptr<MatchExpression> right_;
 };
 
 /**
@@ -92,11 +100,12 @@ private:
 class HasChild : public MatchExpression {
 public:
   HasChild(const MatchExpression &e) :
-    expr_(e) {}
+    expr_(e.clone()) {}
 
   virtual bool match(const Expression &e) const override;
+  virtual HasChild* clone() const override { return new HasChild(*expr_); }
 private:
-  const MatchExpression &expr_;
+  std::unique_ptr<MatchExpression> expr_;
 };
 
 class NumChildren : public MatchExpression {
@@ -105,6 +114,7 @@ public:
     num_(n) {}
 
   virtual bool match(const Expression &e) const override;
+  virtual NumChildren* clone() const override { return new NumChildren(num_); }
 private:
   size_t num_;
 };
@@ -112,12 +122,13 @@ private:
 class Child : public MatchExpression {
 public:
   Child(size_t n, const MatchExpression &e) :
-    num_(n), expr_(e) {}
+    num_(n), expr_(e.clone()) {}
 
   virtual bool match(const Expression &e) const override;
+  virtual Child* clone() const override { return new Child(num_, *expr_); }
 private:
   size_t num_;
-  const MatchExpression &expr_;
+  std::unique_ptr<MatchExpression> expr_;
 };
 
 struct MatchResult {
