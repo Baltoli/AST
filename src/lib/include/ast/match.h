@@ -10,6 +10,13 @@ public:
   virtual bool match(Expression *e) const = 0;
 };
 
+class Any : public MatchExpression {
+public:
+  Any() {}
+
+  virtual bool match(Expression *e) const override;
+};
+
 class Exact : public MatchExpression {
 public:
   Exact(const Symbol& sym) :
@@ -29,6 +36,17 @@ public:
 private:
   const MatchExpression *left_;
   const MatchExpression *right_;
+};
+
+class HasChild : public MatchExpression {
+public:
+  HasChild(MatchExpression *e) :
+    expr_(e) {}
+
+
+  virtual bool match(Expression *e) const override;
+private:
+  const MatchExpression *expr_;
 };
 
 }
