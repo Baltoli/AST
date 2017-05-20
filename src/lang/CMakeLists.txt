@@ -1,5 +1,6 @@
 add_executable(l1c
-  src/main.cpp)
+  src/main.cpp
+  src/language.cpp)
 
 target_link_libraries(l1c
   ast)
