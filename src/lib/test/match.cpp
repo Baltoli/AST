@@ -107,3 +107,31 @@ TEST_CASE("nth children matches") {
 
   REQUIRE(!ex.match(Symbol("ewijof")));
 }
+
+TEST_CASE("searching") {
+  SECTION("in a symbol") {
+    auto ex = Exact(Symbol("abc"));
+    auto sym = Symbol("abc");
+    auto results = search(sym, ex);
+
+    REQUIRE(results.size() == 1);
+    REQUIRE(static_cast<const Symbol&>(results[0].expr) == sym);
+  }
+
+  SECTION("in a composite") {
+    auto ex = Exact(Symbol("abc"));
+    auto c = Composite();
+    c.add_member(Symbol("abc"));
+    c.add_member(Symbol("nope"));
+
+    auto c2 = Composite();
+    c2.add_member(Symbol("abc"));
+    c.add_member(c2);
+
+    auto results = search(c, ex);
+    REQUIRE(results.size() == 2);
+    REQUIRE(std::all_of(std::begin(results), std::end(results), [&](auto r) {
+      return static_cast<const Symbol&>(r.expr) == Symbol("abc");
+    }));
+  }
+}

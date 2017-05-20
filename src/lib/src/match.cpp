@@ -69,4 +69,22 @@ bool Child::match(const Expression &e) const
   return false;
 }
 
+std::vector<MatchResult> search(const Expression& e, const MatchExpression& expr)
+{
+  std::vector<MatchResult> results;
+
+  if(expr.match(e)) {
+    results.emplace_back(e);
+  }
+
+  if(auto comp = dynamic_cast<const Composite *>(&e)) {
+    for(auto&& child : *comp) {
+      auto subs = search(*child, expr);
+      std::copy(std::begin(subs), std::end(subs), std::back_inserter(results));
+    }
+  }
+
+  return results;
+}
+
 }

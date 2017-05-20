@@ -3,6 +3,8 @@
 
 #include <ast/ast.h>
 
+#include <vector>
+
 namespace ast {
 
 /**
@@ -117,6 +119,15 @@ private:
   size_t num_;
   const MatchExpression &expr_;
 };
+
+struct MatchResult {
+  MatchResult(const Expression& e) :
+    expr(e) {}
+
+  const Expression& expr;
+};
+
+std::vector<MatchResult> search(const Expression& e, const MatchExpression& expr);
 
 }
 
