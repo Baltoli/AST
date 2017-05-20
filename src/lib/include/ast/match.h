@@ -7,17 +7,17 @@ namespace ast {
 
 class MatchExpression {
 public:
-  virtual bool match() const = 0;
+  virtual bool match(Expression *e) const = 0;
 };
 
 class Exact : public MatchExpression {
 public:
   Exact(const Symbol& sym) :
-    sym_(sym) {}
+    symbol_(sym) {}
 
-  virtual bool match() const override;
+  virtual bool match(Expression *e) const override;
 private:
-  const Symbol& sym_;
+  const Symbol& symbol_;
 };
 
 }

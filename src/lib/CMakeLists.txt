@@ -29,7 +29,8 @@ add_executable(testast
   test/test.cpp
   test/ast.cpp
   test/ast_print.cpp
-  test/parser.cpp)
+  test/parser.cpp
+  test/match.cpp)
 
 target_link_libraries(testast
   ast)
