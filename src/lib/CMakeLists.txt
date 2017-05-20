@@ -3,7 +3,8 @@ project(libast VERSION 0.1 LANGUAGES CXX)
 add_library(ast
   src/ast.cpp
   src/ast_print.cpp
-  src/parser.cpp)
+  src/parser.cpp
+  src/match.cpp)
 
 target_compile_features(ast PUBLIC
   cxx_auto_type 
@@ -28,7 +29,8 @@ add_executable(testast
   test/test.cpp
   test/ast.cpp
   test/ast_print.cpp
-  test/parser.cpp)
+  test/parser.cpp
+  test/match.cpp)
 
 target_link_libraries(testast
   ast)
