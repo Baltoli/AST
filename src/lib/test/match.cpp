@@ -23,9 +23,7 @@ TEST_CASE("exact matches") {
 }
 
 TEST_CASE("either matches") {
-  auto a = std::make_unique<Exact>(Symbol("a"));
-  auto b = std::make_unique<Exact>(Symbol("b"));
-  auto e = Either(a.get(), b.get());
+  auto e = Either(Exact(Symbol("a")), Exact(Symbol("b")));
 
   REQUIRE(e.match(Symbol("a")));
   REQUIRE(e.match(Symbol("b")));
@@ -34,12 +32,8 @@ TEST_CASE("either matches") {
 
 TEST_CASE("both matches") {
   auto a = Exact(Symbol("a"));
-  auto ca = HasChild(&a);
-
   auto b = Exact(Symbol("b"));
-  auto cb = HasChild(&b);
-
-  auto c = Both(&ca, &cb);
+  auto c = Both(HasChild(a), HasChild(b));
 
   auto comp = Composite();
   comp.add_member(Symbol("a"));
@@ -51,7 +45,7 @@ TEST_CASE("both matches") {
 
 TEST_CASE("has child matches") {
   auto ch = Exact(Symbol("sym"));
-  auto ex = HasChild(&ch);
+  auto ex = HasChild(ch);
 
   auto c = Composite();
   c.add_member(Symbol("sym"));

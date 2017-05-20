@@ -29,35 +29,35 @@ private:
 
 class Either : public MatchExpression {
 public:
-  Either(MatchExpression *l, MatchExpression *r) :
+  Either(const MatchExpression &l, const MatchExpression &r) :
     left_(l), right_(r) {}
 
   virtual bool match(const Expression &e) const override;
 private:
-  const MatchExpression *left_;
-  const MatchExpression *right_;
+  const MatchExpression &left_;
+  const MatchExpression &right_;
 };
 
 class Both : public MatchExpression {
 public:
-  Both(MatchExpression *l, MatchExpression *r) :
+  Both(const MatchExpression &l, const MatchExpression &r) :
     left_(l), right_(r) {}
 
   virtual bool match(const Expression &e) const override;
 private:
-  const MatchExpression *left_;
-  const MatchExpression *right_;
+  const MatchExpression &left_;
+  const MatchExpression &right_;
 };
 
 class HasChild : public MatchExpression {
 public:
-  HasChild(MatchExpression *e) :
+  HasChild(const MatchExpression &e) :
     expr_(e) {}
 
   virtual bool match(const Expression &e) const override;
 
 private:
-  const MatchExpression *expr_;
+  const MatchExpression &expr_;
 };
 
 }
