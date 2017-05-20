@@ -43,8 +43,8 @@ public:
   HasChild(MatchExpression *e) :
     expr_(e) {}
 
-
   virtual bool match(Expression *e) const override;
+
 private:
   const MatchExpression *expr_;
 };
