@@ -99,6 +99,26 @@ AnyOf::AnyOf(T&& t, Ts&&... rest) :
   exprs_.emplace_back(std::move(t).clone());
 }
 
+class AllOf : public MatchExpression {
+public:
+  AllOf() = default;
+
+  template<class T, class... Ts>
+  AllOf(T&& t, Ts&&... rest);
+
+  virtual bool match(const Expression &e) const override;
+  virtual AllOf* clone() const override;
+private:
+  std::vector<std::unique_ptr<MatchExpression>> exprs_;
+};
+
+template<class T, class... Ts>
+AllOf::AllOf(T&& t, Ts&&... rest) :
+  AllOf(rest...)
+{
+  exprs_.emplace_back(std::move(t).clone());
+}
+
 /**
  * Matches both of two subexpressions.
  */

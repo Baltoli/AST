@@ -49,6 +49,24 @@ AnyOf* AnyOf::clone() const
   return ret;
 }
 
+bool AllOf::match(const Expression &e) const
+{
+  return std::all_of(std::begin(exprs_), std::end(exprs_), [&](auto& ex) {
+    return ex->match(e);
+  });
+}
+
+AllOf* AllOf::clone() const
+{
+  auto ret = new AllOf();
+
+  for(auto&& expr : exprs_) {
+    ret->exprs_.emplace_back(expr->clone());
+  }
+
+  return ret;
+}
+
 bool Both::match(const Expression &e) const
 {
   return left_->match(e) && right_->match(e);

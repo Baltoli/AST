@@ -158,3 +158,48 @@ TEST_CASE("any of matching") {
   d.add_member(Composite());
   REQUIRE(!ex.match(d));
 }
+
+TEST_CASE("all of matching") {
+  SECTION("contradiction") {
+    auto ex = AllOf{
+      Exact(Symbol("a")),
+      Exact(Symbol("b"))
+    };
+
+    REQUIRE(!ex.match(Symbol("a")));
+    REQUIRE(!ex.match(Symbol("b")));
+  }
+
+  SECTION("empty") {
+    auto ex = AllOf{
+    };
+
+    REQUIRE(ex.match(Symbol("wiefj")));
+    REQUIRE(ex.match(Composite()));
+  }
+
+  SECTION("matching") {
+    auto ex = AllOf{
+      Child(0, Exact(Symbol("a"))),
+      Child(1, Exact(Symbol("b"))),
+      Child(2, HasChild(AnyOf{
+        Exact(Symbol("c")),
+        Exact(Symbol("d"))
+      }))
+    };
+
+    Composite c;
+    REQUIRE(!ex.match(c));
+
+    c.add_member(Symbol("a"));
+    REQUIRE(!ex.match(c));
+
+    c.add_member(Symbol("b"));
+    REQUIRE(!ex.match(c));
+
+    Composite d;
+    d.add_member(Symbol("c"));
+    c.add_member(d);
+    REQUIRE(ex.match(c));
+  }
+}
