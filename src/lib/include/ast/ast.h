@@ -30,14 +30,14 @@ public:
 
 class Composite : public Expression {
 public:
-  template<class Iterator>
-  Composite(Iterator begin, Iterator end);
-
   Composite() {};
+
+  template<class T, class... Ts>
+  explicit Composite(T&& t, Ts&&... rest);
 
   Composite(const Composite& other) {
     for(auto&& e : other) {
-      members_.push_back(std::unique_ptr<Expression>(e->clone()));
+      members_.emplace_back(e->clone());
     }
   }
 
@@ -46,8 +46,7 @@ public:
     return *this;
   }
 
-  template<class Expr>
-  void add_member(Expr&& e);
+  void add_member(const Expression& e);
 
   void add_member(std::unique_ptr<Expression> e);
 
@@ -75,18 +74,11 @@ bool operator< (const Symbol& rhs, const Symbol& lhs);
 bool operator== (const Composite& rhs, const Composite& lhs);
 bool operator!= (const Composite& rhs, const Composite& lhs);
 
-template<class Iterator>
-Composite::Composite(Iterator begin, Iterator end)
+template<class T, class... Ts>
+Composite::Composite(T&& t, Ts&&... rest) :
+  Composite(rest...)
 {
-  for(auto it = begin; it != end; ++it) {
-    members_.push_back(std::move(*it));
-  }
-}
-
-template<class Expr>
-void Composite::add_member(Expr&& e)
-{
-  members_.emplace_back(new typename std::remove_reference<Expr>::type (std::move(e)));
+  members_.emplace(std::begin(members_), t.clone());
 }
 
 }

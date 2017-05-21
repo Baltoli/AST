@@ -52,20 +52,23 @@ TEST_CASE("composites can be constructed") {
     REQUIRE(c.size() == 0);
   }
 
-  SECTION("they can be constructed from iterators") {
-    std::vector<std::unique_ptr<ast::Expression>> v{};
-    v.emplace_back(new ast::Symbol("a"));
-    v.emplace_back(new ast::Symbol("b"));
-    v.emplace_back(new ast::Composite);
+  SECTION("they can be constructed variadically") {
+    ast::Composite c{
+      ast::Symbol("a"),
+      ast::Symbol("b"),
+      ast::Composite{
+        ast::Symbol("c")
+      }
+    };
 
-    ast::Composite c(std::begin(v), std::end(v));
     REQUIRE(c.size() == 3);
+    REQUIRE(static_cast<ast::Composite *>(c[2].get())->size() == 1);
   }
 
   SECTION("they can have new members added") {
     ast::Composite c;
     c.add_member(ast::Symbol("a"));
-    c.add_member(ast::Composite{});
+    c.add_member(ast::Composite());
     REQUIRE(c.size() == 2);
   }
 }
