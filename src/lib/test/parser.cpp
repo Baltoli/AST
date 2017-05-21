@@ -2,15 +2,17 @@
 
 #include "catch.h"
 
+using namespace ast;
+
 TEST_CASE("symbols can be parsed") {
   SECTION("unquoted symbols") {
     auto sym = ast::SymbolParser(":hello").get();
     REQUIRE(sym);
-    REQUIRE(sym.data->id == "hello");
+    REQUIRE(static_cast<Symbol *>(sym.data.get())->id == "hello");
 
     auto sym2 = ast::SymbolParser(":v").get();
     REQUIRE(sym2);
-    REQUIRE(sym2.data->id == "v");
+    REQUIRE(static_cast<Symbol *>(sym2.data.get())->id == "v");
   }
 
   SECTION("invalid unquoted symbols") {
@@ -41,23 +43,23 @@ TEST_CASE("symbols can be parsed") {
   SECTION("quoted symbols") {
     auto sym = ast::SymbolParser(":\"hello\"").get();
     REQUIRE(sym);
-    REQUIRE(sym.data->id == "hello");
+    REQUIRE(static_cast<Symbol *>(sym.data.get())->id == "hello");
 
     auto sym2 = ast::SymbolParser(":\"hi world\"").get();
     REQUIRE(sym2);
-    REQUIRE(sym2.data->id == "hi world");
+    REQUIRE(static_cast<Symbol *>(sym2.data.get())->id == "hi world");
 
     auto sym3 = ast::SymbolParser(":\":\"").get();
     REQUIRE(sym3);
-    REQUIRE(sym3.data->id == ":");
+    REQUIRE(static_cast<Symbol *>(sym3.data.get())->id == ":");
 
     auto sym4 = ast::SymbolParser(":\"\"").get();
     REQUIRE(sym4);
-    REQUIRE(sym4.data->id == "");
+    REQUIRE(static_cast<Symbol *>(sym4.data.get())->id == "");
 
     auto sym5 = ast::SymbolParser(":\"\n\"").get();
     REQUIRE(sym5);
-    REQUIRE(sym5.data->id == "\n");
+    REQUIRE(static_cast<Symbol *>(sym5.data.get())->id == "\n");
   }
 
   SECTION("invalid quoted symbols") {
@@ -79,7 +81,7 @@ TEST_CASE("symbols survive printing") {
     auto p = ast::SymbolParser(str).get();
 
     REQUIRE(p);
-    REQUIRE(s == *p.data);
+    REQUIRE(s == *static_cast<Symbol *>(p.data.get()));
   }
 }
 
@@ -87,31 +89,31 @@ TEST_CASE("composites can be parsed") {
   SECTION("empty composite") {
     auto c = ast::CompositeParser("()").get();
     REQUIRE(c);
-    REQUIRE(c.data->size() == 0);
+    REQUIRE(static_cast<Composite *>(c.data.get())->size() == 0);
   }
 
   SECTION("simple composites") {
     auto c = ast::CompositeParser("(:hello)").get();
     REQUIRE(c);
-    REQUIRE(c.data->size() == 1);
+    REQUIRE(static_cast<Composite *>(c.data.get())->size() == 1);
 
     auto c2 = ast::CompositeParser("(  :hello\t \n :lol )").get();
     REQUIRE(c2);
-    REQUIRE(c2.data->size() == 2);
+    REQUIRE(static_cast<Composite *>(c2.data.get())->size() == 2);
 
     auto c3 = ast::CompositeParser("((:hello) :lol)").get();
     REQUIRE(c3);
-    REQUIRE(c3.data->size() == 2);
+    REQUIRE(static_cast<Composite *>(c3.data.get())->size() == 2);
 
     auto c4 = ast::CompositeParser("((()))").get();
     REQUIRE(c4);
-    REQUIRE(c4.data->size() == 1);
+    REQUIRE(static_cast<Composite *>(c4.data.get())->size() == 1);
   }
 
   SECTION("leading whitespace") {
     auto c = ast::CompositeParser(" \n\t\t ()").get();
     REQUIRE(c);
-    REQUIRE(c.data->size() == 0);
+    REQUIRE(static_cast<Composite *>(c.data.get())->size() == 0);
   }
 
   SECTION("quotes, nesting") {
@@ -135,5 +137,5 @@ TEST_CASE("composites survive printing") {
   auto p = ast::CompositeParser(str).get();
   
   REQUIRE(p);
-  REQUIRE(c == *p.data);
+  REQUIRE(c == *static_cast<Composite *>(p.data.get()));
 }

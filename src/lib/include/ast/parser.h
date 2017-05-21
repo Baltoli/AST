@@ -8,19 +8,18 @@
 
 namespace ast {
 
-template<class T>
 class ParseResult {
 public:
   ParseResult() :
     data(nullptr) {}
 
-  ParseResult(T t, std::string::const_iterator end) :
-    data(new T(t)), end_(end) {}
+  ParseResult(const Expression& t, std::string::const_iterator end) :
+    data(t.clone()), end_(end) {}
 
-  ParseResult(const ParseResult<T>& other) :
-    data(new T(*other.data)), end_(other.end_) {}
+  ParseResult(const ParseResult& other) :
+    data(other.data->clone()), end_(other.end_) {}
 
-  ParseResult<T>& operator=(ParseResult<T> other) {
+  ParseResult operator=(ParseResult other) {
     std::swap(data, other.data);
     std::swap(end_, other.end_);
     return *this;
@@ -31,7 +30,7 @@ public:
     return end_; 
   }
 
-  std::unique_ptr<T> data;
+  std::unique_ptr<Expression> data;
 
   operator bool() const {
     return static_cast<bool>(data);
@@ -49,10 +48,10 @@ public:
   SymbolParser(const std::string& s) :
     SymbolParser(std::begin(s), std::end(s)) {}
 
-  ParseResult<Symbol> get() const;
+  ParseResult get() const;
 private:
-  ParseResult<Symbol> get_unquoted() const;
-  ParseResult<Symbol> get_quoted() const;
+  ParseResult get_unquoted() const;
+  ParseResult get_quoted() const;
 
   const std::string::const_iterator begin_;
   const std::string::const_iterator end_;
@@ -67,7 +66,7 @@ public:
   CompositeParser(const std::string& s) :
     CompositeParser(std::begin(s), std::end(s)) {}
 
-  ParseResult<Composite> get() const;
+  ParseResult get() const;
 private:
   using iterator = std::string::const_iterator;
 

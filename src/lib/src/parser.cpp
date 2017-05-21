@@ -7,12 +7,12 @@
 
 namespace ast {
 
-ParseResult<Symbol> SymbolParser::get() const
+ParseResult SymbolParser::get() const
 {
   auto it = begin_;
 
   if(*it != ':') {
-    return ParseResult<Symbol>{};
+    return ParseResult{};
   }
   it++;
 
@@ -23,10 +23,10 @@ ParseResult<Symbol> SymbolParser::get() const
   }
 }
 
-ParseResult<Symbol> SymbolParser::get_unquoted() const
+ParseResult SymbolParser::get_unquoted() const
 {
   if(end_ - begin_ <= 1) {
-    return ParseResult<Symbol>{};
+    return ParseResult{};
   }
 
   std::stringstream ss;
@@ -41,20 +41,20 @@ ParseResult<Symbol> SymbolParser::get_unquoted() const
   }
 
   if(ss.str().empty()) {
-    return ParseResult<Symbol>{};
+    return ParseResult{};
   }
 
-  return ParseResult<Symbol>(Symbol(ss.str()), it);
+  return ParseResult(Symbol(ss.str()), it);
 }
 
-ParseResult<Symbol> SymbolParser::get_quoted() const
+ParseResult SymbolParser::get_quoted() const
 {
   if(end_ - begin_ <= 2) {
-    return ParseResult<Symbol>{};
+    return ParseResult{};
   }
 
   if(*begin_ != ':' || *(begin_ + 1) != '"') {
-    return ParseResult<Symbol>{};
+    return ParseResult{};
   }
 
   std::stringstream ss;
@@ -69,15 +69,15 @@ ParseResult<Symbol> SymbolParser::get_quoted() const
     ss << *it;
   }
 
-  return ParseResult<Symbol>(Symbol(ss.str()), it);
+  return ParseResult(Symbol(ss.str()), it);
 }
 
-ParseResult<Composite> CompositeParser::get() const
+ParseResult CompositeParser::get() const
 {
   auto it = skip_whitespace(begin_);
 
   if(*it != '(') {
-    return ParseResult<Composite>{};
+    return ParseResult{};
   }
   it++;
 
@@ -104,10 +104,10 @@ ParseResult<Composite> CompositeParser::get() const
 
   it = skip_whitespace(it);
   if(*it != ')') {
-    return ParseResult<Composite>{};
+    return ParseResult{};
   }
 
-  return ParseResult<Composite>(c, it+1);
+  return ParseResult(c, it+1);
 }
 
 }
