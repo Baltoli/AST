@@ -96,7 +96,7 @@ template<class T, class... Ts>
 AnyOf::AnyOf(T&& t, Ts&&... rest) :
   AnyOf(rest...)
 {
-  exprs_.emplace_back(std::move(t).clone());
+  exprs_.emplace_back(t.clone());
 }
 
 class AllOf : public MatchExpression {
@@ -116,7 +116,7 @@ template<class T, class... Ts>
 AllOf::AllOf(T&& t, Ts&&... rest) :
   AllOf(rest...)
 {
-  exprs_.emplace_back(std::move(t).clone());
+  exprs_.emplace_back(t.clone());
 }
 
 /**
