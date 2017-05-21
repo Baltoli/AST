@@ -9,28 +9,27 @@ bool is_integer(std::string s)
   });
 }
 
-ast::Either statement()
+ast::Matcher statement()
 {
-  return Either(
-    store_statement(),
-    Child(0, Exact(Symbol("print")))
-  );
+  return AnyOf{
+    store_statement()
+  };
 }
 
-ast::Both store_statement()
+ast::Matcher store_statement()
 {
-  return Both(
-    NumChildren(2), Both(
+  return AllOf{
+    NumChildren(2),
     Child(0, Exact(Symbol("store"))),
     Child(1, location())
-  ));
+  };
 }
 
-ast::Both location()
+ast::Matcher location()
 {
-  return Both(
-    NumChildren(2), Both (
+  return AllOf{
+    NumChildren(2),
     Child(0, Exact(Symbol("loc"))),
     Child(1, Predicate(is_integer))
-  ));
+  };
 }

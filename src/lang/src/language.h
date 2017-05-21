@@ -5,8 +5,8 @@
 
 bool is_integer(std::string s);
 
-ast::Either statement();
-ast::Both store_statement();
-ast::Both location();
+ast::Matcher statement();
+ast::Matcher store_statement();
+ast::Matcher location();
 
 #endif
