@@ -1,5 +1,7 @@
 #include "language.h"
 
+#include <iostream>
+
 using namespace ast;
 
 bool is_integer(std::string s)
@@ -7,6 +9,13 @@ bool is_integer(std::string s)
   return std::all_of(std::begin(s), std::end(s), [](auto c) {
     return std::isdigit(c);
   });
+}
+
+ast::Matcher program()
+{
+  return AllOf{
+    statement()
+  };
 }
 
 ast::Matcher statement()
@@ -59,4 +68,10 @@ ast::Matcher deref()
     Child(0, Exact(Symbol("deref"))),
     Child(1, location())
   };
+}
+
+ast::Visitor visitor()
+{
+  Visitor v;
+  return v;
 }

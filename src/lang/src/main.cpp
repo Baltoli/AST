@@ -18,8 +18,9 @@ int main()
     std::cerr << "Syntax error!\n";
   }
 
-  if(statement().match(*result.data)) {
+  if(program().match(*result.data)) {
     std::cout << result.data->str() << '\n';
+    visitor().visit(*result.data);
   } else {
     std::cerr << "Not a statement\n";
   }
