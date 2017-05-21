@@ -131,6 +131,17 @@ private:
   std::unique_ptr<MatchExpression> expr_;
 };
 
+class Matcher : public MatchExpression {
+public:
+  Matcher(const MatchExpression& e) :
+    expr_(e.clone()) {}
+
+  virtual bool match(const Expression &e) const override;
+  virtual Matcher* clone() const override { return new Matcher(*expr_); }
+private:
+  std::unique_ptr<MatchExpression> expr_;
+};
+
 struct MatchResult {
   MatchResult(const Expression& e) :
     expr(e) {}

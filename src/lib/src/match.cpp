@@ -69,6 +69,11 @@ bool Child::match(const Expression &e) const
   return false;
 }
 
+bool Matcher::match(const Expression &e) const
+{
+  return expr_->match(e);
+}
+
 std::vector<MatchResult> search(const Expression& e, const MatchExpression& expr)
 {
   std::vector<MatchResult> results;
