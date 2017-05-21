@@ -3,6 +3,10 @@
 
 #include <ast/match.h>
 
-std::unique_ptr<ast::MatchExpression> statement();
+bool is_integer(std::string s);
+
+ast::Either statement();
+ast::Both store_statement();
+ast::Both location();
 
 #endif

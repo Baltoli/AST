@@ -18,7 +18,7 @@ int main()
     std::cerr << "Syntax error!\n";
   }
 
-  if(statement()->match(*result.data)) {
+  if(statement().match(*result.data)) {
     std::cout << result.data->str() << '\n';
   } else {
     std::cerr << "Not a statement\n";
