@@ -110,6 +110,11 @@ bool Matcher::match(const Expression &e) const
   return expr_->match(e);
 }
 
+bool Matcher::operator<(const Matcher& o) const
+{
+  return expr_ < o.expr_;
+}
+
 std::vector<MatchResult> search(const Expression& e, const MatchExpression& expr)
 {
   std::vector<MatchResult> results;
