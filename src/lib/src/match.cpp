@@ -105,6 +105,21 @@ bool Child::match(const Expression &e) const
   return false;
 }
 
+bool Tail::match(const Expression &e) const
+{
+  if(auto comp = dynamic_cast<const Composite *>(&e)) {
+    if(comp->size() <= 1) {
+      return false;
+    }
+
+    return std::all_of(std::begin(*comp) + 1, std::end(*comp), [&](auto&& ch) {
+      return expr_->match(*ch);
+    });
+  }
+
+  return false;
+}
+
 bool Matcher::match(const Expression &e) const
 {
   return expr_->match(e);

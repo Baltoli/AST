@@ -203,3 +203,23 @@ TEST_CASE("all of matching") {
     REQUIRE(ex.match(c));
   }
 }
+
+TEST_CASE("tail matching") {
+  auto ex = AllOf{
+    Child(0, Exact(Symbol("store"))),
+    Tail(IsComposite())
+  };
+
+  auto c = Composite{
+    Symbol("store"),
+    Composite(),
+    Composite{Symbol("feij")}
+  };
+  REQUIRE(ex.match(c));
+
+  auto d = Composite{
+    Composite(),
+    Composite{Symbol("feij")}
+  };
+  REQUIRE(!ex.match(d));
+}
