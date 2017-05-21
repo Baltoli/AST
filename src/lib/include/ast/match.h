@@ -79,6 +79,46 @@ private:
   std::unique_ptr<MatchExpression> right_;
 };
 
+class AnyOf : public MatchExpression {
+public:
+  AnyOf() = default;
+
+  template<class T, class... Ts>
+  AnyOf(T&& t, Ts&&... rest);
+
+  virtual bool match(const Expression &e) const override;
+  virtual AnyOf* clone() const override;
+private:
+  std::vector<std::unique_ptr<MatchExpression>> exprs_;
+};
+
+template<class T, class... Ts>
+AnyOf::AnyOf(T&& t, Ts&&... rest) :
+  AnyOf(rest...)
+{
+  exprs_.emplace_back(std::move(t).clone());
+}
+
+class AllOf : public MatchExpression {
+public:
+  AllOf() = default;
+
+  template<class T, class... Ts>
+  AllOf(T&& t, Ts&&... rest);
+
+  virtual bool match(const Expression &e) const override;
+  virtual AllOf* clone() const override;
+private:
+  std::vector<std::unique_ptr<MatchExpression>> exprs_;
+};
+
+template<class T, class... Ts>
+AllOf::AllOf(T&& t, Ts&&... rest) :
+  AllOf(rest...)
+{
+  exprs_.emplace_back(std::move(t).clone());
+}
+
 /**
  * Matches both of two subexpressions.
  */
@@ -124,10 +164,24 @@ public:
   Child(size_t n, const MatchExpression &e) :
     num_(n), expr_(e.clone()) {}
 
+  /* Child(const Child& other) : */
+  /*   expr_(other.expr_->clone()) {} */
+
   virtual bool match(const Expression &e) const override;
   virtual Child* clone() const override { return new Child(num_, *expr_); }
 private:
   size_t num_;
+  std::unique_ptr<MatchExpression> expr_;
+};
+
+class Matcher : public MatchExpression {
+public:
+  Matcher(const MatchExpression& e) :
+    expr_(e.clone()) {}
+
+  virtual bool match(const Expression &e) const override;
+  virtual Matcher* clone() const override { return new Matcher(*expr_); }
+private:
   std::unique_ptr<MatchExpression> expr_;
 };
 
