@@ -31,6 +31,24 @@ bool Either::match(const Expression &e) const
   return left_->match(e) || right_->match(e);
 }
 
+bool AnyOf::match(const Expression &e) const
+{
+  return std::any_of(std::begin(exprs_), std::end(exprs_), [&](auto& ex) {
+    return ex->match(e);
+  });
+}
+
+AnyOf* AnyOf::clone() const
+{
+  auto ret = new AnyOf();
+
+  for(auto&& expr : exprs_) {
+    ret->exprs_.emplace_back(expr->clone());
+  }
+
+  return ret;
+}
+
 bool Both::match(const Expression &e) const
 {
   return left_->match(e) && right_->match(e);

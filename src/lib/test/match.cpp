@@ -135,3 +135,26 @@ TEST_CASE("searching") {
     }));
   }
 }
+
+TEST_CASE("any of matching") {
+  auto ex = AnyOf{
+    Exact(Symbol("kwj")),
+    NumChildren(0),
+    Child(0, AnyOf{
+      Exact(Symbol("a"))
+    })
+  };
+
+  REQUIRE(ex.match(Symbol("kwj")));
+  REQUIRE(ex.match(Composite()));
+
+  Composite c;
+  c.add_member(Symbol("a"));
+  REQUIRE(ex.match(c));
+
+  REQUIRE(!ex.match(Symbol("fjeh")));
+
+  Composite d;
+  d.add_member(Composite());
+  REQUIRE(!ex.match(d));
+}
