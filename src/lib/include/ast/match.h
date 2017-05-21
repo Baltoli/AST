@@ -164,13 +164,21 @@ public:
   Child(size_t n, const MatchExpression &e) :
     num_(n), expr_(e.clone()) {}
 
-  /* Child(const Child& other) : */
-  /*   expr_(other.expr_->clone()) {} */
-
   virtual bool match(const Expression &e) const override;
   virtual Child* clone() const override { return new Child(num_, *expr_); }
 private:
   size_t num_;
+  std::unique_ptr<MatchExpression> expr_;
+};
+
+class Tail : public MatchExpression {
+public:
+  Tail(const MatchExpression &e) :
+    expr_(e.clone()) {}
+
+  virtual bool match(const Expression &e) const override;
+  virtual Tail* clone() const override { return new Tail(*expr_); }
+private:
   std::unique_ptr<MatchExpression> expr_;
 };
 
