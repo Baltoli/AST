@@ -179,8 +179,18 @@ public:
   Matcher(const MatchExpression& e) :
     expr_(e.clone()) {}
 
+  Matcher(const Matcher& other) :
+    expr_(other.expr_->clone()) {}
+
+  Matcher& operator=(Matcher other) {
+    std::swap(expr_, other.expr_);
+    return *this;
+  }
+
   virtual bool match(const Expression &e) const override;
   virtual Matcher* clone() const override { return new Matcher(*expr_); }
+
+  bool operator<(const Matcher& o) const;
 private:
   std::unique_ptr<MatchExpression> expr_;
 };
