@@ -8,5 +8,8 @@ bool is_integer(std::string s);
 ast::Matcher statement();
 ast::Matcher store_statement();
 ast::Matcher location();
+ast::Matcher value();
+ast::Matcher literal();
+ast::Matcher deref();
 
 #endif
