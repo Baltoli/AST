@@ -6,13 +6,19 @@ using namespace ast;
 
 #include <iostream>
 
-TEST_CASE("visiting") {
-  Visitor v;
+class TestVisitor : public Visitor {
+public:
+  TestVisitor() {
+    on(Exact(Symbol("a")), [&](auto&&) { ++as; });
+    on(IsComposite(), [&](auto&&) { ++cs; });
+  }
 
   int as = 0;
   int cs = 0;
-  v.on(Exact(Symbol("a")), [&](auto&&) { ++as; });
-  v.on(IsComposite(), [&](auto&&) { ++cs; });
+};
+
+TEST_CASE("visiting") {
+  TestVisitor v;
 
   v.visit(Composite{
     Symbol("a"),
@@ -22,6 +28,6 @@ TEST_CASE("visiting") {
     }
   });
 
-  REQUIRE(as == 2);
-  REQUIRE(cs == 3);
+  REQUIRE(v.as == 2);
+  REQUIRE(v.cs == 3);
 }

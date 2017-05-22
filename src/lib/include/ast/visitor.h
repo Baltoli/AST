@@ -10,8 +10,11 @@ namespace ast {
 
 class Visitor {
 public:
-  void on(Matcher, std::function<void (const Expression&)>);
   void visit(const Expression&) const;
+
+protected:
+  void on(Matcher, std::function<void (const Expression&)>);
+
 private:
   std::map<Matcher, std::function<void (const Expression&)>> functions_;
 };
