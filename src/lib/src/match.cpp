@@ -120,6 +120,11 @@ bool Tail::match(const Expression &e) const
   return false;
 }
 
+bool Recursive::match(const Expression &e) const
+{
+  return func_().match(e);
+}
+
 bool Matcher::match(const Expression &e) const
 {
   return expr_->match(e);

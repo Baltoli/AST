@@ -223,3 +223,29 @@ TEST_CASE("tail matching") {
   };
   REQUIRE(!ex.match(d));
 }
+
+TEST_CASE("recursive matching") {
+  SECTION("basic delaying") {
+    auto d = [] { return Exact(Symbol("a")); };
+    auto ex = Recursive(d);
+
+    REQUIRE(ex.match(Symbol("a")));
+  }
+
+  SECTION("recursive") {
+    std::function<Matcher()> r = [&] {
+      return AnyOf{
+        Child(0, Recursive(r)),
+        Exact(Symbol("a"))
+      };
+    };
+    auto ex = Recursive(r);
+
+    REQUIRE(ex.match(Symbol("a")));
+    REQUIRE(!ex.match(Symbol("b")));
+    
+    REQUIRE(ex.match(Composite{Symbol("a"), Symbol("b")}));
+    REQUIRE(ex.match(Composite{Composite{Symbol("a")}}));
+    REQUIRE(ex.match(Composite{Composite{Composite{Symbol("a")}}}));
+  }
+}

@@ -3,6 +3,7 @@
 
 #include <ast/ast.h>
 
+#include <functional>
 #include <vector>
 
 namespace ast {
@@ -204,6 +205,18 @@ public:
 private:
   std::unique_ptr<MatchExpression> expr_;
 };
+
+class Recursive : public MatchExpression {
+public:
+  Recursive(std::function<Matcher()> f) :
+    func_(f) {}
+
+  virtual bool match(const Expression &e) const override;
+  virtual Recursive* clone() const override { return new Recursive(func_); }
+private:
+  std::function<Matcher()> func_;
+};
+
 
 struct MatchResult {
   MatchResult(const Expression& e) :
