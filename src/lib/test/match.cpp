@@ -242,8 +242,9 @@ TEST_CASE("recursive matching") {
     auto ex = Recursive(r);
 
     REQUIRE(ex.match(Symbol("a")));
+    REQUIRE(!ex.match(Symbol("b")));
     
-    REQUIRE(ex.match(Composite{Symbol("a")}));
+    REQUIRE(ex.match(Composite{Symbol("a"), Symbol("b")}));
     REQUIRE(ex.match(Composite{Composite{Symbol("a")}}));
     REQUIRE(ex.match(Composite{Composite{Composite{Symbol("a")}}}));
   }
