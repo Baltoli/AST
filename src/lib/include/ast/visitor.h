@@ -14,6 +14,7 @@ public:
 
 protected:
   void on(Matcher, std::function<void (const Expression&)>);
+  bool recursive_ = true;
 
 private:
   std::map<Matcher, std::function<void (const Expression&)>> functions_;

@@ -15,9 +15,11 @@ void Visitor::visit(const Expression& expr) const
     }
   }
 
-  if(auto comp = dynamic_cast<const Composite*>(&expr)) {
-    for(auto&& child : *comp) {
-      visit(*child);
+  if(recursive_) {
+    if(auto comp = dynamic_cast<const Composite*>(&expr)) {
+      for(auto&& child : *comp) {
+        visit(*child);
+      }
     }
   }
 }

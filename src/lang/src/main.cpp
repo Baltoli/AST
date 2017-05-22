@@ -1,4 +1,5 @@
 #include "language.h"
+#include "typecheck.h"
 
 #include <ast/parser.h>
 
@@ -19,7 +20,11 @@ int main()
   }
 
   if(expression().match(*result.data)) {
-    std::cout << result.data->str() << '\n';
+    //std::cout << result.data->str() << '\n';
+    TypeChecker t;
+    t.visit(*result.data);
+
+    std::cout << t.result() << '\n';
   } else {
     std::cerr << "Not a statement\n";
   }
