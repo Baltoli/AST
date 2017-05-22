@@ -15,6 +15,8 @@ public:
   virtual bool match(const Expression &e) const = 0;
 
   virtual MatchExpression* clone() const = 0;
+
+  virtual ~MatchExpression() {}
 };
 
 /**
@@ -96,12 +98,12 @@ template<class T, class... Ts>
 AnyOf::AnyOf(T&& t, Ts&&... rest) :
   AnyOf(rest...)
 {
-  exprs_.emplace_back(std::move(t).clone());
+  exprs_.emplace_back(t.clone());
 }
 
 class AllOf : public MatchExpression {
 public:
-  AllOf() = default;
+  AllOf() {}
 
   template<class T, class... Ts>
   AllOf(T&& t, Ts&&... rest);
@@ -116,7 +118,7 @@ template<class T, class... Ts>
 AllOf::AllOf(T&& t, Ts&&... rest) :
   AllOf(rest...)
 {
-  exprs_.emplace_back(std::move(t).clone());
+  exprs_.emplace_back(t.clone());
 }
 
 /**
