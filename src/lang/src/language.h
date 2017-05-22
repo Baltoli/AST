@@ -6,14 +6,10 @@
 
 bool is_integer(std::string s);
 
-ast::Matcher program();
-ast::Matcher statement();
-ast::Matcher store_statement();
+ast::Matcher boolean();
+ast::Matcher integer();
 ast::Matcher location();
-ast::Matcher value();
-ast::Matcher literal();
-ast::Matcher deref();
-
-ast::Visitor visitor();
+ast::Matcher operation();
+ast::Matcher expression();
 
 #endif

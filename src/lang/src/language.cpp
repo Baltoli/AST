@@ -11,67 +11,44 @@ bool is_integer(std::string s)
   });
 }
 
-ast::Matcher program()
-{
-  return AllOf{
-    statement()
-  };
-}
-
-ast::Matcher statement()
+ast::Matcher boolean()
 {
   return AnyOf{
-    store_statement()
+    Exact(Symbol("true")),
+    Exact(Symbol("false"))
   };
 }
 
-ast::Matcher store_statement()
+ast::Matcher integer()
 {
-  return AllOf{
-    NumChildren(3),
-    Child(0, Exact(Symbol("store"))),
-    Child(1, location()),
-    Child(2, value())
-  };
+  return Predicate(is_integer);
 }
 
 ast::Matcher location()
 {
   return AllOf{
-    NumChildren(2),
     Child(0, Exact(Symbol("loc"))),
-    Child(1, Predicate(is_integer))
+    Child(1, integer())
   };
 }
 
-ast::Matcher value()
+ast::Matcher operation()
 {
   return AnyOf{
-    literal(),
-    deref()
+    Exact(Symbol("+")),
+    Exact(Symbol("*"))
   };
 }
 
-ast::Matcher literal()
+ast::Matcher expression()
 {
-  return AllOf{
-    NumChildren(2),
-    Child(0, Exact(Symbol("lit"))),
-    Child(1, Predicate(is_integer))
+  return AnyOf{
+    integer(),
+    boolean(),
+    AllOf{
+      Child(0, expression()),
+      Child(1, operation()),
+      Child(2, expression())
+    }
   };
-}
-
-ast::Matcher deref()
-{
-  return AllOf{
-    NumChildren(2),
-    Child(0, Exact(Symbol("deref"))),
-    Child(1, location())
-  };
-}
-
-ast::Visitor visitor()
-{
-  Visitor v;
-  return v;
 }
