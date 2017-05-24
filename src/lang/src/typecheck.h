@@ -48,26 +48,27 @@ private:
     auto comp = dynamic_cast<const ast::Composite *>(&ex);
     if(!comp) { return; }
 
+    auto& op = (*comp)[1];
+    auto sop = op.get()->symbol();
+    if(!sop) { return; }
+
     auto& l = (*comp)[0];
     auto& r = (*comp)[2];
 
-    auto& op = (*comp)[1];
-    if(auto sop = dynamic_cast<const ast::Symbol *>(op.get())) {
-      auto lt = TypeChecker(*l).result();
-      auto rt = TypeChecker(*r).result();
+    auto lt = TypeChecker(*l).result();
+    auto rt = TypeChecker(*r).result();
 
-      if(lt == Int && rt == Int) {
-        if(sop->id == "+") {
-          type_ = Int;
-        } else if(sop->id == ">=") {
-          type_ = Bool;
-        }
+    if(lt == Int && rt == Int) {
+      if(sop->id == "+") {
+        type_ = Int;
+      } else if(sop->id == ">=") {
+        type_ = Bool;
       }
     }
   };
 
   callback on_if = [&](auto&& ex) {
-    auto comp = dynamic_cast<const ast::Composite *>(&ex);
+    auto comp = ex.composite();
     if(!comp) { return; }
 
     auto& c = (*comp)[1];
