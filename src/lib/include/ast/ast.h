@@ -8,11 +8,17 @@
 
 namespace ast {
 
+class Symbol;
+class Composite;
+
 class Expression {
 public:
   virtual std::string str() const = 0;
 
   virtual Expression *clone() const = 0;
+
+  virtual Symbol* symbol() = 0;
+  virtual Composite* composite() = 0;
 
   virtual ~Expression() {}
 };
@@ -26,6 +32,9 @@ public:
   std::string str() const override;
 
   Symbol *clone() const override;
+
+  virtual Symbol* symbol() override { return this; }
+  virtual Composite* composite() override { return nullptr; }
 };
 
 class Composite : public Expression {
@@ -53,6 +62,9 @@ public:
   std::string str() const override;
 
   Composite *clone() const override;
+
+  virtual Symbol* symbol() override { return nullptr; }
+  virtual Composite* composite() override { return this; }
 
   const std::unique_ptr<Expression>& operator [](std::size_t idx) const;
 private:
