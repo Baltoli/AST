@@ -145,3 +145,25 @@ TEST_CASE("composites can be cloned") {
   REQUIRE(clone != c);
   REQUIRE(*c == *clone);
 }
+
+TEST_CASE("expressions can be cast") {
+  SECTION("symbols") {
+    std::unique_ptr<ast::Expression> s = std::make_unique<ast::Symbol>("a");
+
+    auto s2 = s->symbol();
+    REQUIRE(s2);
+
+    auto c = s->composite();
+    REQUIRE(!c);
+  }
+
+  SECTION("composites") {
+    std::unique_ptr<ast::Expression> c = std::make_unique<ast::Composite>();
+
+    auto c2 = c->composite();
+    REQUIRE(c2);
+
+    auto s = c->symbol();
+    REQUIRE(!s);
+  }
+}
