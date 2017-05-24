@@ -5,7 +5,8 @@ add_library(ast
   src/ast_print.cpp
   src/parser.cpp
   src/match.cpp
-  src/visitor.cpp)
+  src/visitor.cpp
+  src/transform.cpp)
 
 target_compile_features(ast PUBLIC
   cxx_auto_type 
@@ -32,7 +33,8 @@ add_executable(testast
   test/ast_print.cpp
   test/parser.cpp
   test/match.cpp
-  test/visitor.cpp)
+  test/visitor.cpp
+  test/transform.cpp)
 
 target_link_libraries(testast
   ast)

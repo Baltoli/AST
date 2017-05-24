@@ -20,6 +20,9 @@ public:
   virtual Symbol* symbol() = 0;
   virtual Composite* composite() = 0;
 
+  virtual const Symbol* symbol() const = 0;
+  virtual const Composite* composite() const = 0;
+
   virtual ~Expression() {}
 };
 
@@ -35,6 +38,9 @@ public:
 
   virtual Symbol* symbol() override { return this; }
   virtual Composite* composite() override { return nullptr; }
+
+  virtual const Symbol* symbol() const override { return this; }
+  virtual const Composite* composite() const override { return nullptr; }
 };
 
 class Composite : public Expression {
@@ -65,6 +71,9 @@ public:
 
   virtual Symbol* symbol() override { return nullptr; }
   virtual Composite* composite() override { return this; }
+
+  virtual const Symbol* symbol() const override { return nullptr; }
+  virtual const Composite* composite() const override { return this; }
 
   const std::unique_ptr<Expression>& operator [](std::size_t idx) const;
 private:
