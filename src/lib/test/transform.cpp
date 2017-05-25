@@ -11,10 +11,11 @@ TEST_CASE("basic transformations") {
 
   Transformer t(s);
   t.run_on(IsSymbol(), [](auto& ex) { 
-    ex = Symbol("b");
+    ex = std::make_unique<Symbol>("m");
   });
 
   auto s2 = t.result().symbol();
   REQUIRE(s2);
-  REQUIRE(*s2 == s);
+  REQUIRE(s2->id == "m");
+  REQUIRE(*s2 != s);
 }
