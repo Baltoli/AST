@@ -29,7 +29,15 @@ class Symbol : public Expression {
 public:
   Symbol(std::string id);
 
-  const std::string id;
+  Symbol(const Symbol& other) :
+    id(other.id) {}
+
+  Symbol& operator=(Symbol other) {
+    std::swap(id, other.id);
+    return *this;
+  }
+
+  std::string id;
 
   std::string str() const override;
 
@@ -37,6 +45,7 @@ public:
 
   virtual Symbol* symbol() override { return this; }
   virtual const Symbol* symbol() const override { return this; }
+
   virtual Composite* composite() override { return nullptr; }
   virtual const Composite* composite() const override { return nullptr; }
 };
@@ -69,6 +78,7 @@ public:
 
   virtual Symbol* symbol() override { return nullptr; }
   virtual const Symbol* symbol() const override { return nullptr; }
+
   virtual Composite* composite() override { return this; }
   virtual const Composite* composite() const override { return this; }
 

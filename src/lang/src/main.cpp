@@ -1,3 +1,4 @@
+#include "interpret.h"
 #include "language.h"
 #include "typecheck.h"
 
@@ -20,11 +21,10 @@ int main()
   }
 
   if(expression().match(*result.data)) {
-    //std::cout << result.data->str() << '\n';
-    TypeChecker t;
-    t.visit(*result.data);
+    Interpreter i(*result.data);
+    auto& r = i.result();
 
-    std::cout << t.result() << '\n';
+    std::cout << r.str() << '\n';
   } else {
     std::cerr << "Not a statement\n";
   }

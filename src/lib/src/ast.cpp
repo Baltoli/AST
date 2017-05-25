@@ -15,8 +15,8 @@ Symbol *Symbol::clone() const
 Composite *Composite::clone() const
 {
   auto c = new Composite;
-  for(auto&& e : *this) {
-    c->members_.push_back(std::move(std::unique_ptr<Expression>(e->clone())));
+  for(auto& e : *this) {
+    c->members_.emplace_back(std::unique_ptr<Expression>(e->clone()));
   }
   return c;
 }
