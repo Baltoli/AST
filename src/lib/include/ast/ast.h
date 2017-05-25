@@ -20,6 +20,9 @@ public:
   virtual Symbol* symbol() = 0;
   virtual Composite* composite() = 0;
 
+  virtual const Symbol* symbol() const = 0;
+  virtual const Composite* composite() const = 0;
+
   virtual ~Expression() {}
 };
 
@@ -35,6 +38,9 @@ public:
 
   virtual Symbol* symbol() override { return this; }
   virtual Composite* composite() override { return nullptr; }
+
+  virtual const Symbol* symbol() const override { return this; }
+  virtual const Composite* composite() const override { return nullptr; }
 };
 
 class Composite : public Expression {
@@ -66,12 +72,19 @@ public:
   virtual Symbol* symbol() override { return nullptr; }
   virtual Composite* composite() override { return this; }
 
+  virtual const Symbol* symbol() const override { return nullptr; }
+  virtual const Composite* composite() const override { return this; }
+
   const std::unique_ptr<Expression>& operator [](std::size_t idx) const;
 private:
   std::vector<std::unique_ptr<Expression>> members_;
 
 public:
+  using iterator = decltype(members_)::iterator;
   using const_iterator = decltype(members_)::const_iterator;
+
+  iterator begin() noexcept { return std::begin(members_); }
+  iterator end() noexcept { return std::end(members_); }
 
   const_iterator begin() const noexcept { return std::begin(members_); }
   const_iterator end() const noexcept { return std::end(members_); }
